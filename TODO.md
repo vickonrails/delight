@@ -1,0 +1,2 @@
+- setup eslint
+- setup monorepo alongside test project

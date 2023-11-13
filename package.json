@@ -1,0 +1,10 @@
+{
+  "name": "delight-monorepo",
+  "module": "lib/index.ts",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ]
+}

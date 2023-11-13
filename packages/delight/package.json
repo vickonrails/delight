@@ -1,0 +1,20 @@
+{
+  "name": "delight",
+  "type": "module",
+  "module": "dist/index.js",
+  "main": "dist/index.js",
+  "types": "dist/src/index.d.ts",
+  "private": true,
+  "scripts": {
+    "build": "bun run build:lib && bun run build:types",
+    "build:lib": "bun build ./src/index.ts --outdir ./dist --watch",
+    "build:types": "tsc -w"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
