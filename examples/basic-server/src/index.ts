@@ -2,8 +2,15 @@ import { Delight } from 'delight'
 
 const app = Delight()
 
+// get
+// get with route params
+// get with query params
+// post
+// put
+// delete
+
 app.route({
-    path: '/',
+    path: '/hello',
     method: 'GET',
     handler: async (request) => {
         return new Response('Hello there and to me')
@@ -11,19 +18,14 @@ app.route({
 })
 
 app.route({
-    path: '/',
-    method: 'POST',
+    path: '/hello/:name',
+    method: 'GET',
     handler: async (request) => {
-        return new Response('This is a post request')
+        const { name } = request.params;
+        return new Response(`Hello there ${name}`)
     }
 })
 
-app.route({
-    path: '/go',
-    method: 'GET',
-    handler: async (request) => {
-        return new Response('handling response for go')
-    }
-})
+
 
 app.listen({ port: 3000 })
