@@ -4,6 +4,7 @@
 // it's also important to be able to set response headers also
 // TODO: the best way to see the use case of a middleware is to add logging functionality to the app
 // I also need to send response headers
+// I have to use a utility function to read the content of the body in chunks
 
 import { DelightRequest } from "./delight";
 
@@ -17,41 +18,50 @@ export interface Route {
 
 export function buildRouter() {
     // TODO: use a plain array for now and something more complex later
-    const router: Route[] = [];
+    const routes: Route[] = [];
 
     return {
         route,
-        getHandler
+        getHandler,
+        routes
     }
 
     function route(routeProps: Route) {
-        // TODO: here where I'm registering the route, I have to add support for route params and query params
-        // say a user enters localhost:3000/hello/2, I should be able to respond to this even if the url is localhost:3000/hello/:id
-        router.push(routeProps)
+        // TODO: find a more performant and robust way to register the routes
+        routes.push(routeProps)
     }
 
     function getHandler(request: DelightRequest) {
-        const { pathname } = new URL(request.url)
-        const route = router.find(route => {
-            const isMatch = isRouteMatch(pathname, route.path)
+        const route = routes.find(route => {
+            const isMatch = isRouteMatch(route.path, request.url)
             return isMatch && route.method === request.method
         })
         if (!route) {
             throw new Error('Not Found')
         }
-        request.params = extractParams(pathname, route.path)
+        request.params = extractRouteParams(request.url, route.path)
+        request.query = extractQueryParams(request.url);
         return route
     }
 }
 
-function extractParams(url: string, path: string) {
+/**
+ * 
+ * @param url request url
+ * @param pattern pattern to match against (added to the router)
+ * @returns {Object} an object of route params
+ * @example given a url like this: http://localhost:3000/blog/2/comments/3
+ * it's going to return { blogId: '2', commentId: '3' }
+ */
+export function extractRouteParams(url: string, pattern: string) {
+    const { pathname } = new URL(url);
     const params: Record<string, string> = {}
-    const urlParts = url.split('/')
-    const pathParts = path.split('/')
+    const urlParts = pathname.split('/')
+    const patternParts = pattern.split('/')
 
     for (let x = 0; x < urlParts.length; x++) {
-        if (pathParts[x].startsWith(':')) {
-            const key = pathParts[x].slice(1)
+        if (patternParts[x].startsWith(':')) {
+            const key = patternParts[x].slice(1)
             const value = urlParts[x]
             params[key] = value
         }
@@ -60,9 +70,22 @@ function extractParams(url: string, path: string) {
     return params
 }
 
-function isRouteMatch(pattern: string, url: string) {
+/**
+ * returns true if the url matches the pattern, false if otherwise
+ * @param pattern route pattern
+ * @param url url of the incoming request
+ * 
+ * @example
+ * // returns true
+ * isRouteMatch('/blog/:blogId/comments/:commentId', 'http://localhost:3000/blog/2/comments/3')
+ * 
+ * @returns {Boolean} true if the url pattern matches the pattern
+ */
+export function isRouteMatch(pattern: string, url: string) {
+    // FIX: edge case where the url is longer than the pattern because of leading slashes
+    const { pathname } = new URL(url)
     const patternParts = pattern.split('/')
-    const urlParts = url.split('/')
+    const urlParts = pathname.split('/')
 
     if (patternParts.length !== urlParts.length) {
         return false
@@ -71,11 +94,23 @@ function isRouteMatch(pattern: string, url: string) {
     for (let x = 0; x < patternParts.length; x++) {
         const patternPart = patternParts[x]
         const urlPart = urlParts[x]
-
         if (patternPart !== urlPart && !patternPart.startsWith(':')) {
             return false
         }
-
-        return true;
     }
+    return true;
+}
+
+/**
+ * @param url 
+ * @returns an object of query params
+ * 
+ * @example given a url like this: http://localhost:3000/blog/2/comments/?author=&age=
+ * it's going to return { author: '', age: '' }
+ * 
+ */
+export function extractQueryParams(url: string) {
+    const { searchParams } = new URL(url)
+    const params = Object.fromEntries(searchParams.entries())
+    return params
 }

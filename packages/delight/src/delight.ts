@@ -7,6 +7,7 @@ interface DelightOptions {
 
 export interface DelightRequest extends Request {
     params: Record<string, string>
+    query: Record<string, string>
 }
 
 export function Delight() {
@@ -14,7 +15,21 @@ export function Delight() {
 
     return {
         route: router.route,
-        listen
+        listen,
+        routes: router.routes,
+        get: (path: string, handler: (request: DelightRequest) => Response | Promise<Response>) => {
+            router.route({ path, method: 'GET', handler })
+        },
+        post: (path: string, handler: (request: DelightRequest) => Response | Promise<Response>) => {
+            router.route({ path, method: 'POST', handler })
+        },
+        put: (path: string, handler: (request: DelightRequest) => Response | Promise<Response>) => {
+            router.route({ path, method: 'PUT', handler })
+        },
+        delete: (path: string, handler: (request: DelightRequest) => Response | Promise<Response>) => {
+            router.route({ path, method: 'DELETE', handler })
+        }
+        // TODO: will implement others later...
     }
 
     function listen(options: DelightOptions) {
