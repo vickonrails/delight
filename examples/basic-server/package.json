@@ -3,7 +3,7 @@
   "module": "src/index.ts",
   "types": "module",
   "scripts": {
-    "dev": "bun --watch run ./src/index.ts"
+    "dev": "bun --hot run ./src/index.ts"
   },
   "dependencies": {
     "delight": "workspace:*"

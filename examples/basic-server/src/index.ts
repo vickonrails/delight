@@ -2,13 +2,6 @@ import { Delight } from 'delight'
 
 const app = Delight()
 
-// get
-// get with route params
-// get with query params
-// post
-// put
-// delete
-
 app.route({
     path: '/hello',
     method: 'GET',
@@ -26,6 +19,13 @@ app.route({
     }
 })
 
+app.get('/hi/:name', async (request) => {
+    return new Response(`Hi there ${request.query.name}`)
+})
+
+app.post('/hi/:name', async (request) => {
+    return new Response(`Hi there ${request.query.name}`)
+})
 
 
 app.listen({ port: 3000 })
