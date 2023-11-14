@@ -1,0 +1,19 @@
+{
+  "name": "todo-api",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --hot run ./index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.6.0",
+    "delight": "workspace:*"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "prisma": "^5.6.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
