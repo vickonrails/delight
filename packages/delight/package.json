@@ -13,8 +13,8 @@
   },
   "private": true,
   "scripts": {
-    "build": "bun run build:lib && bun run build:types",
-    "build:lib": "bun build ./src/index.ts --outdir ./dist --watch",
-    "build:types": "tsc -w"
+    "dev:lib": "bun --watch build ./src/index.ts --outdir ./dist",
+    "build:types": "tsc -w",
+    "test": "bun --watch test"
   }
 }
