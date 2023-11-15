@@ -8,6 +8,12 @@
 
 import { DelightRequest } from "./delight";
 
+export interface Router {
+    route: (route: Route) => void
+    getHandler: (request: DelightRequest) => Route | undefined
+    routes: Route[]
+}
+
 export interface Route {
     path: string,
     // TODO: use a more robust type for method
@@ -16,7 +22,7 @@ export interface Route {
     params?: Record<string, string>
 }
 
-export function buildRouter() {
+export function buildRouter(): Router {
     // TODO: use a plain array for now and something more complex later
     const routes: Route[] = [];
 
@@ -33,7 +39,7 @@ export function buildRouter() {
         routes.push(routeProps)
     }
 
-    function getHandler(request: DelightRequest) {
+    function getHandler(request: DelightRequest): Route {
         const route = routes.find(route => {
             const isMatch = isRouteMatch(route.path, request.url)
             return isMatch && route.method === request.method
