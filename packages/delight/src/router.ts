@@ -12,7 +12,7 @@ export interface Route {
     path: string,
     // TODO: use a more robust type for method
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
-    handler: (request: DelightRequest) => Response | Promise<Response>
+    handler: (request: DelightRequest, response: Response) => Response | Promise<Response>
     params?: Record<string, string>
 }
 
@@ -28,6 +28,8 @@ export function buildRouter() {
 
     function route(routeProps: Route) {
         // TODO: find a more performant and robust way to register the routes
+        // TODO: I thought of using a hashmap instead. I could use the combination of (METHOD-url) as the key and the route as the value
+        // this will give me constant lookup time. I could also use a trie data structure
         routes.push(routeProps)
     }
 
@@ -82,7 +84,9 @@ export function extractRouteParams(url: string, pattern: string) {
  * @returns {Boolean} true if the url pattern matches the pattern
  */
 export function isRouteMatch(pattern: string, url: string) {
+    // This place where I'm doing the manual route comparison can be outsourced to a library like [path-to-regex](https://github.com/pillarjs/path-to-regexp)
     // FIX: edge case where the url is longer than the pattern because of leading slashes
+    // TODO: one more case that's missing here is wildcard matching. I don't know how most frameworks are handling this, but I can look deeper into it
     const { pathname } = new URL(url)
     const patternParts = pattern.split('/')
     const urlParts = pathname.split('/')
