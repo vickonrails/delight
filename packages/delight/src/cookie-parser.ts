@@ -1,4 +1,5 @@
-import { IDelightRequest } from "./delight";
+import { DelightRequest } from "./request";
+
 
 /**
  * @param request Request object
@@ -7,10 +8,9 @@ import { IDelightRequest } from "./delight";
  * @description
  * This middleware parses the cookie header and adds it to the request object
  */
-export function cookieMiddleware(request: IDelightRequest, response: Response) {
+export function cookieMiddleware(request: DelightRequest, response: Response) {
     const cookieHeader = request.headers.get('cookie');
     const cookies = parseCookies(cookieHeader ?? '');
-    console.log(cookieHeader)
     request.cookies = cookies;
 }
 

@@ -1,16 +1,11 @@
 import { ServeOptions } from "bun";
 import { buildMiddlewareQueue } from "./middleware";
+import { DelightRequest } from "./request";
 import { requestHandler } from "./request-handler";
 import { buildRouter } from "./router";
 
 interface DelightOptions {
     port: ServeOptions['port']
-}
-
-export interface DelightRequest extends Request {
-    params: Record<string, string>
-    query: Record<string, string>
-    cookies: Record<string, string>
 }
 
 type Handler = (request: DelightRequest, response: Response) => Response | Promise<Response>

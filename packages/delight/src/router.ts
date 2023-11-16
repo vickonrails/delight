@@ -1,3 +1,4 @@
+import { DelightRequest } from "./request"
 
 // TODO: implement a more fine-tuned routing table that's going to take note of the params, query, etc.
 // TODO: infinite nesting of routes
@@ -5,8 +6,6 @@
 // TODO: the best way to see the use case of a middleware is to add logging functionality to the app
 // I also need to send response headers
 // I have to use a utility function to read the content of the body in chunks
-
-import { DelightRequest } from "./delight";
 
 export interface Router {
     route: (route: Route) => void
@@ -47,8 +46,8 @@ export function buildRouter(): Router {
         if (!route) {
             throw new Error('Not Found')
         }
-        request.params = extractRouteParams(request.url, route.path)
-        request.query = extractQueryParams(request.url);
+        request.params = extractRouteparams(request.url, route.path)
+        request.queryParams = extractQueryParams(request.url);
         return route
     }
 }
@@ -61,7 +60,7 @@ export function buildRouter(): Router {
  * @example given a url like this: http://localhost:3000/blog/2/comments/3
  * it's going to return { blogId: '2', commentId: '3' }
  */
-export function extractRouteParams(url: string, pattern: string) {
+export function extractRouteparams(url: string, pattern: string) {
     const { pathname } = new URL(url);
     const params: Record<string, string> = {}
     const urlParts = pathname.split('/')

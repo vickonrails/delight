@@ -1,5 +1,5 @@
-import { DelightRequest } from "./delight"
 import { Queue } from "./queue"
+import { DelightRequest } from "./request"
 import { isRouteMatch } from "./router"
 
 // Is this going to return a promise? Or return a response? like next() or so...
