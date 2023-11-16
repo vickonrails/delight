@@ -1,6 +1,6 @@
 import { ServeOptions } from "bun";
 import { buildMiddlewareQueue } from "./middleware";
-import { requestHandler } from "./request";
+import { requestHandler } from "./request-handler";
 import { buildRouter } from "./router";
 
 interface DelightOptions {
@@ -10,6 +10,7 @@ interface DelightOptions {
 export interface DelightRequest extends Request {
     params: Record<string, string>
     query: Record<string, string>
+    cookies: Record<string, string>
 }
 
 type Handler = (request: DelightRequest, response: Response) => Response | Promise<Response>

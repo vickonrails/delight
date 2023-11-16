@@ -1,6 +1,11 @@
 export class Queue<T> {
-    private _queue: T[] = [];
+    private _queue: T[];
     private _isProcessing = false
+
+    constructor(initialItems?: T[]) {
+        this._queue = initialItems || []
+    }
+
 
     enqueue(item: T) {
         this.queue.push(item)
