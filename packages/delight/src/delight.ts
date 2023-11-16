@@ -1,8 +1,8 @@
 import { ServeOptions } from "bun";
 import { buildMiddlewareQueue } from "./middleware";
-import { DelightRequest } from "./request";
 import { requestHandler } from "./request-handler";
 import { buildRouter } from "./router";
+import { type DelightRequest } from "./request";
 
 interface DelightOptions {
     port: ServeOptions['port']

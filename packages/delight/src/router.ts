@@ -46,7 +46,7 @@ export function buildRouter(): Router {
         if (!route) {
             throw new Error('Not Found')
         }
-        request.params = extractRouteparams(request.url, route.path)
+        request.params = extractParams(request.url, route.path)
         request.queryParams = extractQueryParams(request.url);
         return route
     }
@@ -60,7 +60,7 @@ export function buildRouter(): Router {
  * @example given a url like this: http://localhost:3000/blog/2/comments/3
  * it's going to return { blogId: '2', commentId: '3' }
  */
-export function extractRouteparams(url: string, pattern: string) {
+export function extractParams(url: string, pattern: string) {
     const { pathname } = new URL(url);
     const params: Record<string, string> = {}
     const urlParts = pathname.split('/')

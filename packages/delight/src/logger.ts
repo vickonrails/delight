@@ -1,6 +1,9 @@
-import { DelightRequest } from "./delight";
+
 
 // better to export a logger middleware than to have it in the default middlewares
+
+import { DelightRequest } from "./request";
+
 /**
  * 
  * @param request Request object

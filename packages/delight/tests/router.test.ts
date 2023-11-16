@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { Delight } from "../src";
-import { extractRouteParams, extractQueryParams, isRouteMatch } from "../src/router";
+import { extractParams, extractQueryParams, isRouteMatch } from "../src/router";
 
 // TODO: right now, bun is running all the tests in the project, even the ones in the /dist folder
 // I have to figure out a way to resolve that
@@ -10,8 +10,8 @@ describe("Router", () => {
             const url = 'http://localhost:3000/blog/2/comments/3'
             const pattern = '/blog/:blogId/comments/:commentId'
 
-            const routeParams = extractRouteParams(url, pattern)
-            expect(routeParams).toEqual({ blogId: '2', commentId: '3' })
+            const params = extractParams(url, pattern)
+            expect(params).toEqual({ blogId: '2', commentId: '3' })
         })
 
         test('query params are extracted correctly', () => {
@@ -24,10 +24,10 @@ describe("Router", () => {
             const url = 'http://localhost:3000/blog/2/comments/3?author=Mosses&age=20'
             const pattern = '/blog/:blogId/comments/:commentId'
             const queryParams = extractQueryParams(url)
-            const routeParams = extractRouteParams(url, pattern)
+            const params = extractParams(url, pattern)
 
             expect(queryParams).toEqual({ author: 'Mosses', age: '20' })
-            expect(routeParams).toEqual({ blogId: '2', commentId: '3' })
+            expect(params).toEqual({ blogId: '2', commentId: '3' })
         })
 
         // empty route & query params are extracted correctly 
@@ -35,10 +35,10 @@ describe("Router", () => {
             const url = 'http://localhost:3000/blog/2/comments/?author=&age='
             const pattern = '/blog/:blogId/comments/:commentId'
             const queryParams = extractQueryParams(url)
-            const routeParams = extractRouteParams(url, pattern)
+            const params = extractParams(url, pattern)
 
             expect(queryParams).toEqual({ author: '', age: '' })
-            expect(routeParams).toEqual({ blogId: '2', commentId: '' })
+            expect(params).toEqual({ blogId: '2', commentId: '' })
         })
     })
 

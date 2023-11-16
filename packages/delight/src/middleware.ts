@@ -1,7 +1,6 @@
 import { cookieMiddleware } from "./cookie-parser";
-import { DelightRequest } from "./delight";
-import { loggerMiddleware } from "./logger";
 import { Middleware, MiddlewareQueue } from "./middleware-queue";
+import { DelightRequest } from "./request";
 
 type registerMiddlewareFn = (request: DelightRequest, response: Response) => Promise<void>
 

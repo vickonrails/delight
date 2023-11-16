@@ -9,30 +9,27 @@ app.registerMiddleware('*', loggerMiddleware);
 app.route({
     path: '/hello',
     method: 'GET',
-    handler: async (request, response) => {
-        return new Response('Hello there and to me')
+    handler: async (request) => {
+        return new Response(JSON.stringify({ hi: 'hello' }), { status: 200, headers: { 'Content-Type': 'application/json' } })
     }
 })
 
 app.route({
     path: '/hello/:name',
     method: 'GET',
-    handler: async (request, response) => {
+    handler: async (request) => {
         const { name } = request.params;
-        return response.json();
+        return Response.json({ message: `Hello ${name}` }, { status: 200, headers: { 'Content-Type': 'application/json' } })
     }
 })
 
 app.get('/hi', async (request) => {
-    return new Response('Hi there')
+    return new Response(JSON.stringify({ greeting: 'Hi there' }), { headers: { 'Content-Type': 'application/json' } })
 })
 
 app.get('/hi/:name', async (request) => {
-    return new Response(`Hi there ${request.params.name}`)
-})
-
-app.post('/hi', async (request) => {
-    return new Response(`Hi there`)
+    const accepts = request.headers.get('Accept')
+    return new Response(`Hi there, I accept ${accepts}`)
 })
 
 // TODO: 404 route to handle all not-found requests
