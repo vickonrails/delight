@@ -11,17 +11,41 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  password String
-  name     String?
-  posts    Post[]
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  name      String?
+  username  String    @unique
+  posts     Post[]
+  session   Session[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Post {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+model Session {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  expiresAt DateTime
+  ip        String
+  status    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// The sqlite connector does not support enum
+// enum SessionStatus {
+//   ACTIVE
+//   EXPIRED
+//   TERMINATED
+// }
