@@ -4,12 +4,11 @@ import { DelightRequest } from "./request";
 import { Router } from "./router";
 
 export function requestHandler(request: DelightRequest, middlewares: MiddlewareQueue, router: Router) {
-    const delightRequest = new DelightRequest(request.clone())
     const requestMiddlewares = middlewares.clone()
     const response = new Response()
 
     // all middlewares are processed here
-    requestMiddlewares.processQueue(delightRequest, response)
+    requestMiddlewares.processQueue(request, response)
     // get the handler that matches this request
     const route = router.getHandler(request)
 

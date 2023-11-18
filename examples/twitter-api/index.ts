@@ -1,20 +1,19 @@
-import { PrismaClient } from '@prisma/client'
-import { Delight } from 'delight'
+import { PrismaClient } from '@prisma/client';
+import { Delight, loggerMiddleware } from 'delight';
+import { headers } from './utils/headers';
+import { sessionMiddleware } from './utils/session-middleware';
 
 export const prisma = new PrismaClient()
 
 const app = Delight()
 
+app.registerMiddleware('*', loggerMiddleware)
+app.registerMiddleware('*', sessionMiddleware)
+
 // this is a usecase of where I need a middleware to handle cors
-const headers = new Headers();
-headers.set('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, X-PINGOTHER, Authorization, X-Request-With')
-headers.set('Access-Control-Allow-Origin', '*')
-headers.set('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-headers.set('Access-Control-Allow-Credentials', 'true')
 
 app.post('/api/posts', async (request) => {
     const { content, authorId } = await request.json()
-    console.log(content, authorId);
     if (!content || !authorId) return Response.json({
         error: 'Some fields are is required'
     }, { status: 400, headers })
@@ -35,7 +34,7 @@ app.post('/api/posts', async (request) => {
     }
 })
 
-app.get('/api/posts', async () => {
+app.get('/api/posts', async (request) => {
     // TODO: order by created at by adding it to the database
     const posts = await prisma.post.findMany({ include: { author: true } });
     return Response.json({
@@ -141,29 +140,60 @@ app.post('/api/create-user', async (request) => {
 
 app.post('/api/login', async (request) => {
     const { email, password } = await request.json()
-    // first confirm user exists
     const userExists = await prisma.user.findUnique({ where: { email } })
-    console.log(userExists);
     if (!userExists) return Response.json({ error: 'Incorrect credentials' }, { status: 401, headers })
-    // then compare password
     const passwordMatch = await Bun.password.verify(password, userExists.password)
     if (!passwordMatch) return Response.json({ error: 'Incorrect credentials' })
 
-    return Response.json({ error: null, data: { user: userExists } }, {
-        headers
+    // generate a session id (TODO: use a more standard method of generating session ids)
+
+    const randomString = (Math.random() * 10).toString(36)
+    const ip = request.headers.get('x-forwarded-for')
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 10)
+    // I want to ideally do this with response.cookie('session-id', randomString)
+    // TODO: handle error
+    await prisma.session.create({
+        data: {
+            id: randomString,
+            status: 'active',
+            userId: userExists.id,
+            ip: ip || '',
+            expiresAt
+        }
     })
-    // create session and store in database
-    // return user along with session
+
+    headers.set('Set-Cookie', `session-id=${randomString}; Expires=${expiresAt} HttpOnly; Secure; SameSite=Strict`)
+    // this is where I'll most likely create a session
+    // and store it to the session store
+    // after which I can send the session id to the client
+    // and the client can use it to make requests to the server
+
+    return Response.json({ error: null }, {
+        headers,
+        status: 200
+    })
+})
+
+app.post('/api/logout', async (request) => {
+    const { session: cookieSession } = request
+
+    if (cookieSession) {
+        await prisma.session.delete({
+            where: { id: cookieSession?.id }
+        })
+    }
+
+    return Response.json({ error: null }, { headers })
 })
 
 app.route({
-    handler: async (request) => new Response(null, { headers }),
+    handler: async () => new Response(null, { headers }),
     path: '/api/login',
     method: 'OPTIONS'
 })
 
 app.route({
-    handler: async (request) => new Response(null, { headers }),
+    handler: async () => new Response(null, { headers }),
     path: '/api/posts',
     method: 'OPTIONS'
 })

@@ -1,3 +1,5 @@
+import { Session } from '@prisma/client';
+
 export class DelightRequest extends Request {
     private _originalRequest: Request;
 
@@ -5,6 +7,7 @@ export class DelightRequest extends Request {
     public queryParams: Record<string, string> = {};
     public cookies: Record<string, string> = {};
     public queryString: string = '';
+    public session?: Session;
 
     constructor(
         originalRequest: Request
@@ -14,4 +17,5 @@ export class DelightRequest extends Request {
     }
 
     get originalRequest() { return this._originalRequest; }
+
 }
