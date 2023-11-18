@@ -16,7 +16,7 @@ export interface Router {
 export interface Route {
     path: string,
     // TODO: use a more robust type for method
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS',
     handler: (request: DelightRequest, response: Response) => Response | Promise<Response>
     params?: Record<string, string>
 }

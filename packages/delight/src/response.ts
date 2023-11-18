@@ -18,3 +18,5 @@ class DelightResponse extends Response {
         return this;
     }
 }
+
+// there has to be a setHeader method, getHeader, etc. Basically proxies on the original response

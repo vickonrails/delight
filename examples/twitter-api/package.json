@@ -3,7 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "dependencies": {
-    "delight": "workspace:*"
+    "delight": "workspace:*",
+    "prisma": "^5.6.0"
   },
   "devDependencies": {
     "bun-types": "latest"

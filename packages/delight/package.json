@@ -13,6 +13,7 @@
   },
   "private": true,
   "scripts": {
+    "dev": "bun run dev:lib & bun run dev:types",
     "dev:lib": "bun --watch build ./src/index.ts --outdir ./dist",
     "dev:types": "tsc -w",
     "test": "bun --watch test"
