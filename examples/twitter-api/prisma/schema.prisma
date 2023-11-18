@@ -15,11 +15,11 @@ model User {
   email     String    @unique
   password  String
   name      String?
-  username  String    @unique
+  username  String?   @unique
   posts     Post[]
   session   Session[]
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  updatedAt DateTime  @default(now()) @updatedAt
 }
 
 model Post {
@@ -29,7 +29,7 @@ model Post {
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Session {
