@@ -1,0 +1,14 @@
+{
+  "name": "twitter-api",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "delight": "workspace:*"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "scripts": {
+    "dev": "bun --watch run ./index.ts"
+  }
+}
