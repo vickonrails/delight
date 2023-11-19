@@ -1,8 +1,5 @@
 import { cookieMiddleware } from "./cookie-parser";
-import { Middleware, MiddlewareQueue } from "./middleware-queue";
-import { DelightRequest } from "./request";
-
-type registerMiddlewareFn = (request: DelightRequest, response: Response) => Promise<void>
+import { Middleware, MiddlewareFn, MiddlewareQueue } from "./middleware-queue";
 
 const defaultMiddlewares: Middleware[] = [
     { path: '*', middleware: cookieMiddleware },
@@ -19,7 +16,7 @@ export function buildMiddlewareQueue() {
         middlewares
     }
 
-    function registerMiddleware(path: string, middleware: registerMiddlewareFn) {
+    function registerMiddleware(path: string, middleware: MiddlewareFn) {
         middlewares.enqueue({ path, middleware })
     }
 }

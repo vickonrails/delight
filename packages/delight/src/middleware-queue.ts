@@ -3,7 +3,7 @@ import { DelightRequest } from "./request"
 import { isRouteMatch } from "./router"
 
 // Is this going to return a promise? Or return a response? like next() or so...
-type MiddlewareFn = (request: DelightRequest, response: Response) => void | Promise<void>
+export type MiddlewareFn = (request: DelightRequest, response: Response) => void | Promise<Response | undefined> | Promise<void>
 export interface Middleware {
     path: string,
     middleware: MiddlewareFn
