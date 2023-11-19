@@ -2,14 +2,12 @@ import { Delight, loggerMiddleware } from 'delight'
 
 const app = Delight();
 
-// first middleware will be a logger
-// second middleware will be request stats
 app.registerMiddleware('*', loggerMiddleware);
 
 app.route({
     path: '/hello',
     method: 'GET',
-    handler: async (request) => {
+    handler: async () => {
         return new Response(JSON.stringify({ hi: 'hello' }), { status: 200, headers: { 'Content-Type': 'application/json' } })
     }
 })
@@ -23,7 +21,7 @@ app.route({
     }
 })
 
-app.get('/hi', async (request) => {
+app.get('/hi', async () => {
     return new Response(JSON.stringify({ greeting: 'Hi there' }), { headers: { 'Content-Type': 'application/json' } })
 })
 

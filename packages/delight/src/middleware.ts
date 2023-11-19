@@ -7,7 +7,7 @@ const defaultMiddlewares: Middleware[] = [
 
 // TODO: I have to export another cors middleware that takes care of headers
 // TODO: I also have to build a fine way to manage headers
-// TODO: I also have to add the OPTIONS method to the router to handle the preflight request
+// TODO: I also have to add an OPTIONS handler to the router (alongside cors) to handle the preflight request
 
 export function buildMiddlewareQueue() {
     const middlewares = new MiddlewareQueue(defaultMiddlewares);

@@ -7,14 +7,15 @@ export async function requestHandler(request: DelightRequest, middlewares: Middl
     const requestMiddlewares = middlewares.clone()
     const response = new Response()
 
-
     // all middlewares are processed here
+    // TODO: there's this bug where responses are not fully returned from the middleware queue
+    // I need to fix this, but for now, I'll just return the response from the router
     await requestMiddlewares.processQueue(request, response)
     // get the handler that matches this request
     const route = router.getHandler(request)
 
     if (!route) {
-        // TODO: possibly render some kind of 404 page here (if provided by the user)
+        // TODO: possibly use a default 404 response handler (if provided by the user)
         return new Response('Not Found', { status: 404 })
     }
 

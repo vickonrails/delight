@@ -6,11 +6,9 @@ export class Queue<T> {
         this._queue = initialItems || []
     }
 
-
     enqueue(item: T) {
         this.queue.push(item)
-        // TODO: I don't know if I should start processing the queue immediately or wait till I start it from the outside
-        // Ideally I want to process it once a request comes in right? 
+        // Ideally I want to process it once a request comes 
         // so I shouldn't start processing before even getting a request. 
         // if (!this.isProcessing) {
         //     this.processQueue()

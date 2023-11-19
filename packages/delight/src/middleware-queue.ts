@@ -2,7 +2,8 @@ import { Queue } from "./queue"
 import { DelightRequest } from "./request"
 import { isRouteMatch } from "./router"
 
-// Is this going to return a promise? Or return a response? like next() or so...
+// I have to think if I need to call next() to continue the middleware chain (like in next).
+// I might not need to do that because I'm using a queue
 export type MiddlewareFn = (request: DelightRequest, response: Response) => void | Promise<Response | undefined> | Promise<void>
 export interface Middleware {
     path: string,

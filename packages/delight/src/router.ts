@@ -33,8 +33,9 @@ export function buildRouter(): Router {
 
     function route(routeProps: Route) {
         // TODO: find a more performant and robust way to register the routes
-        // TODO: I thought of using a hashmap instead. I could use the combination of (METHOD-url) as the key and the route as the value
-        // this will give me constant lookup time. I could also use a trie data structure
+        // I thought of using a hashmap instead. I could use the combination of (METHOD-url) 
+        // as the key and the route as the value this will give me constant lookup time. 
+        // I could also use a trie data structure, but this will do for now
         routes.push(routeProps)
     }
 
@@ -43,6 +44,7 @@ export function buildRouter(): Router {
             const isMatch = isRouteMatch(route.path, request.url)
             return isMatch && route.method === request.method
         })
+        // TODO: ideally I don't want to throw for every route that's not found (think assets, favicons etc)
         if (!route) {
             throw new Error('Not Found')
         }

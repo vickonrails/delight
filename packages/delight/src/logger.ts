@@ -13,7 +13,7 @@ import { DelightRequest } from "./request";
  * This middleware logs the request method and url to the console
  */
 export async function loggerMiddleware(request: DelightRequest, response: Response) {
-    // TODO: add support for logging to a file
-    // TODO: use morgan for now, then experiment with building an inbuilt one later
+    // TODO: add support for logging to an external file
+    // TODO: I can experiment with using an external logger library or build one that goes together with the framework
     console.log(`${request.method} ${request.url}`)
 }

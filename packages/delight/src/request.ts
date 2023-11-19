@@ -1,5 +1,5 @@
 import { Session } from '@prisma/client';
-
+// right now, this is just a wrapper around the request object to provide type safety for extra fields (params, session, etc)
 export class DelightRequest extends Request {
     private _originalRequest: Request;
 
@@ -17,5 +17,4 @@ export class DelightRequest extends Request {
     }
 
     get originalRequest() { return this._originalRequest; }
-
 }

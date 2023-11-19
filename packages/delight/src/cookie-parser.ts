@@ -1,6 +1,5 @@
 import { DelightRequest } from "./request";
 
-
 /**
  * @param request Request object
  * @param response Response object

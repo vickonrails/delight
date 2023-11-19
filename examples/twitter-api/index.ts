@@ -17,11 +17,12 @@ app.registerMiddleware('*', loggerMiddleware)
 app.registerMiddleware('*', sessionMiddleware)
 app.registerMiddleware('*', authenticationMiddleware)
 
-// this is a usecase of where I need a middleware to handle cors
-
+/**
+ * create new post
+ */
 app.post('/api/posts', async (request) => {
     if (!isAuthenticated(request)) {
-        return Response.json({ message: 'an error oh' }, { status: 401 })
+        return Response.json({ message: 'an error occurred' }, { status: 401 })
     }
 
     const { content, authorId } = await request.json()
@@ -30,8 +31,7 @@ app.post('/api/posts', async (request) => {
     }, { status: 400, headers })
 
     try {
-        // first confirm the user is available
-        const user = await prisma.user.findUnique({ where: { email: 'victor2@gmail.com' } })
+        const user = await prisma.user.findUnique({ where: { id: parseInt(authorId) } })
         if (!user) {
             return Response.json({ message: 'user does not exist' }, { status: 400 })
         }
@@ -51,9 +51,12 @@ app.post('/api/posts', async (request) => {
     }
 })
 
+/**
+ * get all posts
+ */
 app.get('/api/posts', async (request) => {
     if (!isAuthenticated(request)) {
-        return Response.json({}, { status: 401 })
+        return Response.json({ message: 'an error occurred' }, { status: 401 })
     }
 
     // TODO: order by created at by adding it to the database
@@ -67,9 +70,12 @@ app.get('/api/posts', async (request) => {
     })
 })
 
+/**
+ * get all posts
+ */
 app.get('/api/posts/:postId', async (request) => {
     if (!isAuthenticated(request)) {
-        return Response.json({ me }, { status: 401 })
+        return Response.json({ message: 'an error occurred' }, { status: 401 })
     }
 
     const { postId } = request.params
@@ -93,9 +99,12 @@ app.get('/api/posts/:postId', async (request) => {
     })
 })
 
+/**
+ * update a post
+ */
 app.put('/api/posts/:postId', async (request) => {
     if (!isAuthenticated(request)) {
-        return Response.json({}, { status: 401 })
+        return Response.json({ message: 'an error occurred' }, { status: 401 })
     }
 
     const { postId } = request.params
@@ -122,9 +131,12 @@ app.put('/api/posts/:postId', async (request) => {
     }
 })
 
+/**
+ * delete a post
+ */
 app.delete('/api/posts/:postId', async (request) => {
     if (!isAuthenticated(request)) {
-        return Response.json({}, { status: 401 })
+        return Response.json({ message: 'an error occurred' }, { status: 401 })
     }
 
     const { postId } = request.params
@@ -142,6 +154,9 @@ app.delete('/api/posts/:postId', async (request) => {
     }
 })
 
+/**
+ * create a user (create account)
+ */
 app.post('/api/create-user', async (request) => {
     const { email, name, password } = await request.json()
     if (!email || !name || !password) return Response.json({
@@ -171,6 +186,9 @@ app.post('/api/create-user', async (request) => {
     }
 })
 
+/**
+ * login
+ */
 app.post('/api/login', async (request) => {
     const { email, password } = await request.json()
     const userExists = await prisma.user.findUnique({ where: { email } })
@@ -178,8 +196,7 @@ app.post('/api/login', async (request) => {
     const passwordMatch = await Bun.password.verify(password, userExists.password)
     if (!passwordMatch) return Response.json({ error: 'Incorrect credentials' })
 
-    // generate a session id (TODO: use a more standard method of generating session ids)
-
+    // TODO: use a more standard method of generating session ids)
     const randomString = (Math.random() * 10).toString(36)
     const ip = request.headers.get('x-forwarded-for')
     const expiresAt = new Date(Date.now() + 1000 * 60 * 10)
@@ -204,11 +221,8 @@ app.post('/api/login', async (request) => {
         name: user.name
     }
 
+    // manually set all the required cookies for the session
     headers.set('Set-Cookie', `session-id=${randomString}; Expires=${expiresAt}; Domain=localhost; Path=/; HttpOnly; SameSite=Lax;`)
-    // this is where I'll most likely create a session
-    // and store it to the session store
-    // after which I can send the session id to the client
-    // and the client can use it to make requests to the server
 
     return Response.json({
         error: null,
@@ -219,6 +233,9 @@ app.post('/api/login', async (request) => {
     })
 })
 
+/**
+ * logout
+ */
 app.get('/api/logout', async (request) => {
     const { session: cookieSession } = request
 
@@ -231,9 +248,12 @@ app.get('/api/logout', async (request) => {
     return Response.json({ error: null }, { headers })
 })
 
+/**
+ * get current user
+ */
 app.get('/api/me/:userId', async (request) => {
     if (!isAuthenticated(request)) {
-        return Response.json({}, { status: 401 })
+        return Response.json({ message: 'an error occurred' }, { status: 401 })
     }
     const { userId } = request.params
 
@@ -244,12 +264,12 @@ app.get('/api/me/:userId', async (request) => {
     return Response.json({ error: null, data: { user } }, { headers })
 })
 
+// This are the routes to handle the preflight request for requests with ContentType: application/json header
 app.route({
     handler: async () => new Response(null, { headers }),
     path: '/api/login',
     method: 'OPTIONS'
 })
-
 app.route({
     handler: async () => new Response(null, { headers }),
     path: '/api/posts',
@@ -257,9 +277,3 @@ app.route({
 })
 
 app.listen({ port: 3000 })
-
-// TODO: I can do this to always solve the options preflight request
-// if (req.method === 'OPTIONS') {
-//     res.sendStatus(200);
-//     return;
-//   }

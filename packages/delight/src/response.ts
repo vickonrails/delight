@@ -1,3 +1,5 @@
+// TODO: I'll need to enhance the built in response object to add some utility fields
+// e.g response.setHeaders(), basically proxies on the response object
 class DelightResponse extends Response {
     private _originalResponse: Response;
 
@@ -13,10 +15,4 @@ class DelightResponse extends Response {
             this._originalResponse = new Response()
         }
     }
-
-    async send() {
-        return this;
-    }
 }
-
-// there has to be a setHeader method, getHeader, etc. Basically proxies on the original response
