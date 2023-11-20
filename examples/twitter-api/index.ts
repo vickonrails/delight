@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client'
 import { Delight, loggerMiddleware } from 'delight-framework';
-import { DelightRequest } from 'delight/dist/src/request';
 import { authenticationMiddleware } from './utils/authentication-middleware';
 import { headers } from './utils/headers';
 import { sessionMiddleware } from './utils/session-middleware';
+import { DelightRequest } from 'delight-framework/dist/src/request';
 
 export const prisma = new PrismaClient()
 
@@ -22,7 +22,7 @@ app.registerMiddleware('*', authenticationMiddleware)
  */
 app.post('/api/posts', async (request) => {
     if (!isAuthenticated(request)) {
-        return Response.json({ message: 'an error occurred' }, { status: 401 })
+        return Response.json({ message: 'User not authenticated' }, { status: 401 })
     }
 
     const { content, authorId } = await request.json()
@@ -56,7 +56,7 @@ app.post('/api/posts', async (request) => {
  */
 app.get('/api/posts', async (request) => {
     if (!isAuthenticated(request)) {
-        return Response.json({ message: 'an error occurred' }, { status: 401 })
+        return Response.json({ message: 'User not authenticated' }, { status: 401 })
     }
 
     // TODO: order by created at by adding it to the database
@@ -75,7 +75,7 @@ app.get('/api/posts', async (request) => {
  */
 app.get('/api/posts/:postId', async (request) => {
     if (!isAuthenticated(request)) {
-        return Response.json({ message: 'an error occurred' }, { status: 401 })
+        return Response.json({ message: 'User not authenticated' }, { status: 401 })
     }
 
     const { postId } = request.params
@@ -104,7 +104,7 @@ app.get('/api/posts/:postId', async (request) => {
  */
 app.put('/api/posts/:postId', async (request) => {
     if (!isAuthenticated(request)) {
-        return Response.json({ message: 'an error occurred' }, { status: 401 })
+        return Response.json({ message: 'User not authenticated' }, { status: 401 })
     }
 
     const { postId } = request.params
@@ -136,7 +136,7 @@ app.put('/api/posts/:postId', async (request) => {
  */
 app.delete('/api/posts/:postId', async (request) => {
     if (!isAuthenticated(request)) {
-        return Response.json({ message: 'an error occurred' }, { status: 401 })
+        return Response.json({ message: 'User not authenticated' }, { status: 401 })
     }
 
     const { postId } = request.params
@@ -253,7 +253,7 @@ app.get('/api/logout', async (request) => {
  */
 app.get('/api/me/:userId', async (request) => {
     if (!isAuthenticated(request)) {
-        return Response.json({ message: 'an error occurred' }, { status: 401 })
+        return Response.json({ message: 'User not authenticated' }, { status: 401 })
     }
     const { userId } = request.params
 
