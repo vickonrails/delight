@@ -2,8 +2,10 @@
   "name": "twitter-api",
   "module": "index.ts",
   "type": "module",
+  "private": true,
+  "version": "0.0.1",
   "dependencies": {
-    "delight": "workspace:*",
+    "delight-framework": "workspace:*",
     "prisma": "^5.6.0"
   },
   "devDependencies": {

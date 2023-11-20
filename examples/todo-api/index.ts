@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Delight } from 'delight';
+import { Delight } from 'delight-framework';
 import { createTodo, deleteTodo, getTodo, updateTodo } from './repository';
 
 export function isErrorWithMessage(error: unknown): error is { message: string } {

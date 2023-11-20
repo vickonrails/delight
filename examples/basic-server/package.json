@@ -2,11 +2,13 @@
   "name": "basic-server",
   "module": "src/index.ts",
   "types": "module",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
     "dev": "bun --hot run ./src/index.ts"
   },
   "dependencies": {
-    "delight": "workspace:*"
+    "delight-framework": "workspace:*"
   },
   "devDependencies": {
     "bun-types": "latest"

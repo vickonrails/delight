@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "emitDeclarationOnly": true,
     "lib": [
       "ESNext"
     ],
@@ -22,5 +23,10 @@
     "types": [
       "bun-types" // add Bun global
     ]
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests",
+  ]
 }

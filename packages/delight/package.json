@@ -1,8 +1,13 @@
 {
-  "name": "delight",
+  "name": "delight-framework",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "type": "module",
+  "version": "0.0.4",
+  "files": [
+    "dist/",
+    "README.md"
+  ],
   "types": "dist/src/index.d.ts",
   "devDependencies": {
     "bun-types": "latest",
@@ -11,11 +16,18 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "bun run dev:lib & bun run dev:types",
     "dev:lib": "bun --watch build ./src/index.ts --outdir ./dist",
     "dev:types": "tsc -w",
-    "test": "bun --watch test"
+    "test": "bun --watch test",
+
+    "build": "bun run build:lib & bun run build:types",
+    "build:types": "tsc",
+    "build:lib": "bun build ./src/index.ts --outdir ./dist"
+  },
+  "dependencies": {
+    "dts-bundle-generator": "^8.1.2"
   }
 }

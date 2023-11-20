@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import { Delight, loggerMiddleware } from 'delight';
+import { PrismaClient } from '@prisma/client'
+import { Delight, loggerMiddleware } from 'delight-framework';
 import { DelightRequest } from 'delight/dist/src/request';
 import { authenticationMiddleware } from './utils/authentication-middleware';
 import { headers } from './utils/headers';

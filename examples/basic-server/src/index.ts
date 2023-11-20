@@ -1,4 +1,4 @@
-import { Delight, loggerMiddleware } from 'delight'
+import { Delight, loggerMiddleware } from 'delight-framework'
 
 const app = Delight();
 
