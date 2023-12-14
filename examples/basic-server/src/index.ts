@@ -30,7 +30,4 @@ app.get('/hi/:name', async (request) => {
     return new Response(`Hi there, I accept ${accepts}`)
 })
 
-// TODO: 404 route to handle all not-found requests
-// app.404
-
 app.listen({ port: 3000 })

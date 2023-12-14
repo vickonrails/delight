@@ -11,7 +11,7 @@ export const prisma = new PrismaClient()
 function main() {
     const app = Delight()
 
-    app.post('/api/posts', async (request) => {
+    app.post('/api/todos', async (request) => {
         const { title, description } = await request.json();
         try {
             if (!title || description) throw new Error('Some fields are is required')
@@ -25,7 +25,7 @@ function main() {
         }
     })
 
-    app.get('/api/posts', async () => {
+    app.get('/api/todos', async () => {
         const todos = await prisma.todo.findMany();
         return Response.json({ todos });
     })
@@ -44,7 +44,7 @@ function main() {
         }
     })
 
-    app.put('/api/posts/:postId', async (request) => {
+    app.put('/api/todos/:todoId', async (request) => {
         const { title, description, done } = await request.json();
         const { postId } = request.params;
         try {
@@ -58,7 +58,7 @@ function main() {
         }
     })
 
-    app.delete('/api/posts/:postId', async (request) => {
+    app.delete('/api/todos/:todoId', async (request) => {
         const { postId } = request.params;
         try {
             await deleteTodo(postId)
